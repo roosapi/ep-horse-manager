@@ -1,6 +1,6 @@
 import './index.css'; // import css
 
-import HorsesPage from './horses/HorsesPage';
+import HorsesPage from './components/HorsesPage';
 
 
 import { createRoot } from "react-dom/client";

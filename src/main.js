@@ -3,19 +3,6 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
 
-app.commandLine.appendSwitch(
-  'enable-features',
-  'UseOzonePlatform,WaylandWindowDecorations'
-);
-app.commandLine.appendSwitch('ozone-platform', 'wayland');
-app.commandLine.appendSwitch('enable-wayland-ime');
-app.commandLine.appendSwitch('use-gl', 'egl');
-// Everything currently works without these, but there 
-// are GL / GPU errors on startup; enable again if problems
-// emerge
-//app.commandLine.appendSwitch('use-angle', 'opengl');
-//app.commandLine.appendSwitch('disable-gpu-sandbox');
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
