@@ -6,3 +6,9 @@
     padding: 3px 8px;
     border-bottom:1px solid;
 }
+
+.input-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
