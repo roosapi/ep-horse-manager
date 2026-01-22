@@ -1,0 +1,8 @@
+.horse-table {
+    border-collapse: collapse;
+}
+
+.horse-table th, td {
+    padding: 3px 8px;
+    border-bottom:1px solid;
+}
