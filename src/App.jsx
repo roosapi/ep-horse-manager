@@ -15,11 +15,15 @@ root.render(
   <App />
 );
 
-// TODO: change state based on button click 
-// and show appropriate page
+// TODO: actual routing instead of using buttons for navigation
 function App() {
   const [activePage,setActivePage] = useState();
+
   let use_page;
+
+  const handlePageChange = (new_active_page) => {
+    setActivePage(new_active_page)
+  }
   if (activePage === "horses") {
     use_page=<HorsesPage />;
    } else if (activePage === "add-horse") {
@@ -28,8 +32,9 @@ function App() {
 
    return (
     <>
-    <div><button>Horses</button>
-    <button>Add New Horse</button></div>
+    <div>
+      <button onClick={()=>handlePageChange('horses')}>Horses</button>
+     <button onClick={()=>handlePageChange('add-horse')}>Add New Horse</button></div>
     {use_page}
     </>
    );
