@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Horse } from '../horses/Horse';
+import { Horse } from '../-resources/Horse';
 
 const HorseListItem = ({horse}) => {
     return (

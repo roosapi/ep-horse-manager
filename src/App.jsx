@@ -7,10 +7,7 @@ import { routeTree } from './routeTree.gen'
 
 import './index.css'; // import css
 
-
-// Create a new router instance
 const router = createRouter({ routeTree })
-
 
 const root = createRoot(document.getElementById('root'))
 root.render(

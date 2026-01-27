@@ -1,5 +1,9 @@
-export const AddHorseForm = () => {
-    return (
+import {createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/horses/add")({
+  component: () => (
+        <>
+        <h1>Add a horse</h1>
         <form className="input-form">
             <label htmlFor="id">Horse ID</label>
             <input type="number" name="id" />
@@ -16,5 +20,7 @@ export const AddHorseForm = () => {
                 </button>
             </div>
         </form>
-    );
-}
+        </>
+    ),
+})
+
