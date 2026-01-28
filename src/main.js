@@ -1,12 +1,30 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow,ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
+import {HorseDatabase} from './utilities/dbManager'
+
+const db = new HorseDatabase(path.join(__dirname,'../../database/horses_test.db'));
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
   app.quit();
 }
+
+// ---- DATABASE HANDLERS START
+// TODO could probably directly call the module and skip this 
+// handler function?
+async function handleAddHorse (event,horse_data) {
+  const is_success = db.insertHorse(horse_data);
+  return is_success;
+}
+
+async function handleGetHorses (event) {
+  const horses_data = db.getHorses();
+  return horses_data;
+}
+// ---- DATABASE HANDLERS END
+
 
 const createWindow = () => {
   // Create the browser window.
@@ -35,6 +53,10 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+
+  ipcMain.handle('db:addHorse', handleAddHorse);
+  ipcMain.handle('db:getHorses', handleGetHorses);
+
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
@@ -51,6 +73,7 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    db.closeConnection();
     app.quit();
   }
 });
