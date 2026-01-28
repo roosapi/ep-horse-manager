@@ -19,7 +19,10 @@ export class HorseDatabase {
                                      sex    INT, 
                                      breed  TEXT, 
                                      type   TEXT, 
-                                     height INT
+                                     height INT,
+                                     born   INT,
+                                     sire   INT,
+                                     dam    INT
                                      )`);
         createHorseTable.run();
     }

@@ -3,6 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
 import {HorseDatabase} from './utilities/dbManager'
+import * as HorseParser from './utilities/horseInfoParser'
 
 const db = new HorseDatabase(path.join(__dirname,'../../database/horses_test.db'));
 
@@ -15,8 +16,10 @@ if (started) {
 // TODO could probably directly call the module and skip this 
 // handler function?
 async function handleAddHorse (event,horse_data) {
-  const is_success = db.insertHorse(horse_data);
-  return is_success;
+  // TODO parse horse data
+  HorseParser.parseHorseInfo(horse_data);
+  //const is_success = db.insertHorse(horse_data);
+  //return is_success;
 }
 
 async function handleGetHorses (event) {

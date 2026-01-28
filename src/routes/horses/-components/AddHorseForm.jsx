@@ -11,9 +11,8 @@ export const AddHorseForm = () => {
         const db_success = await window.databaseAPI.addHorse(data);
     }
 // id,name,sex,breed,type,height,birthyear,sire_id,dam_id
-    return (
-         <form className="input-form" action={createHorse}>
-            <label htmlFor="id">Horse ID</label>
+
+/*           <label htmlFor="id">Horse ID</label>
             <input type="number" name="id" />
             <label htmlFor="name">Name</label>
             <input type="string" name="name" />            
@@ -24,7 +23,11 @@ export const AddHorseForm = () => {
             <label htmlFor="type">Type</label>
             <input type="string" name="type" />
             <label htmlFor="height">Height</label>
-            <input type="number" name="height" />
+            <input type="number" name="height" /> */
+    return (
+         <form className="input-form" action={createHorse}>
+            <label htmlFor="basic">Basic Information</label>
+            <textarea name="basic" />
             <div>
                 <button type="submit" className="confirm-button">Add Horse</button>
                 <span />

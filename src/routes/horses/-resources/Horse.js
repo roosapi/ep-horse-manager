@@ -1,9 +1,22 @@
 export class Horse {
 
-    // BASICS
+
+
+/*         
+    id     INT PRIMARY KEY, 
+    name   TEXT, 
+    sex    INT, 
+    breed  TEXT, 
+    type   TEXT, 
+    height INT,
+    born   INT,
+    sire   INT,
+    dam    INT */
+
+    // BASICS TODO match to DB
     id; // int
     name = "foal doe"; // String
-    gender = ""; // String; enum?
+    gender = ""; // int enum
     breed = ""; // String
     type; // enum
     height = 0; // int
