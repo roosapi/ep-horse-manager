@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-import { Horse } from '../-resources/Horse';
 import { useEffect, useState } from 'react';
 
 const HorseListItem = ({horse}) => {
@@ -7,8 +5,11 @@ const HorseListItem = ({horse}) => {
     <tr>
         <td>{horse.id}</td>
         <td>{horse.name}</td>
-        <td>{horse.gender}</td>
+        <td>{horse.sex}</td>
         <td>{horse.breed}</td>
+        <td>{horse.type}</td>
+        <td>{horse.height}</td>
+        <td>{horse.born}</td>
     </tr>
     );
 }
@@ -27,15 +28,12 @@ const HorseList = () => {
     return ( 
     <table className="horse-table">
         <tbody>
-            <tr><th>ID</th><th>Name</th><th>Sex</th><th>Breed</th></tr>
+            <tr><th>ID</th><th>Name</th><th>Sex</th><th>Breed</th><th>Type</th><th>H (cm)</th><th>Born</th></tr>
             {horseListItems}
         </tbody>
     </table>
     );
 }
 
-HorseList.PropTypes = {
-    horses: PropTypes.arrayOf(PropTypes.instanceOf (Horse)).isRequired
-}
 
 export default HorseList;

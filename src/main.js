@@ -2,8 +2,8 @@ import { app, BrowserWindow,ipcMain } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
-import {HorseDatabase} from './utilities/dbManager'
-import * as HorseParser from './utilities/horseInfoParser'
+import {HorseDatabase} from './utilities/dbManager';
+import * as HorseParser from './utilities/horseInfoParser';
 
 const db = new HorseDatabase(path.join(__dirname,'../../database/horses_test.db'));
 
@@ -17,9 +17,9 @@ if (started) {
 // handler function?
 async function handleAddHorse (event,horse_data) {
   // TODO parse horse data
-  HorseParser.parseHorseInfo(horse_data);
-  //const is_success = db.insertHorse(horse_data);
-  //return is_success;
+  const parsedData = HorseParser.parseHorseInfo(horse_data);
+  const is_success = db.insertHorse(parsedData);
+  return is_success;
 }
 
 async function handleGetHorses (event) {

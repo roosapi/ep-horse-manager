@@ -1,18 +1,23 @@
-import { get } from "node:http";
-
-// TODO finish input data handling: update horse model, create enums for the fields needed, populate database based on the parsed data
+import * as typedefs from './typedefs';
 
 // Receives an object from the form: {basic: TEXT, ...}
+// Returns an object with relevant information extracted.
 const parseHorseInfo = (horseData) => {
     const {basic} = horseData;
 
-    // Take everything from "General data" to "Pedigree"
+    // Take everything from "General data" to "Pedigree" (includes basic information, personality, conformation)
     const relevantData = sliceBetweenStr(basic,"General data","Pedigree")
-    console.log(relevantData)
-    extractBasicInfo(basic)
+    //console.log(relevantData)
+    return extractBasicInfo(basic);
 }
 
-// Return string starting from 'startStr' and ending to 'endStr' (exclusive)
+/**
+ * Extracts a substring of dataStr.
+ * @param {string} dataStr 
+ * @param {string} startStr - Determines the start location for slice
+ * @param {string} endSrt - Determines the end location for slice (exclusive)
+ * @returns {string}
+ */
 const sliceBetweenStr = (dataStr,startStr,endSrt) => {
     // For most properties there is only one occurence, but height may repeat
     // since foals list both current height and the final adult height; in that case
@@ -23,36 +28,52 @@ const sliceBetweenStr = (dataStr,startStr,endSrt) => {
 }
 
 // Parses basic info rows to value string
-const getInfoRow = (dataStr,keyStr,endStr="\n") => {
-    return sliceBetweenStr(dataStr,keyStr,endStr).split(':')[1].trim()
-}
+/**
+ * Extracts the value basic info determined by keyStr:
+ * The horse info should be in rows of form: "Info key: Info value \n"
+ * @param {string} dataStr - String containing all the horse info.
+ * @param {string} keyStr - Determines the info key and where to start slice.
+ * @param {string} [endStr="\n"] - Determines where to end slice (exclusive).
+ * @returns {string}
+ */
+const getInfoValue = (dataStr,keyStr,endStr="\n") => {
+    return sliceBetweenStr(dataStr,keyStr,endStr).split(':')[1].trim();
+};
 
-/*         
-    id     INT PRIMARY KEY, 
-    name   TEXT, 
-    sex    INT, (enum)
-    breed  TEXT, 
-    type   TEXT, (enum)
-    height INT,
-    born   INT, (year)
-    sire   INT,
-    dam    INT 
-*/
+/**
+ * 
+ * @param {string} dataString - A string containing all the basic horse information.
+ * @returns @type {typedefs.Horse}
+ */
 const extractBasicInfo = (dataString) => {
+    const extractHorseName = (nameStr) => {
+        return (nameStr.includes("Colt") || nameStr.includes("Filly")) ? "" : nameStr;
+    };
+    const abbrBreed = (breedStr) => {
+
+        // TODO this better eventually; maybe read map from file if makes sense?
+        const breedMap = {
+            'American Quarter Horse': 'AQH',
+            'American Paint Horse': 'APH',
+            'American Azteca': 'AZT',
+            'Puro Sangue Lusitano': 'PSL',
+            'Andalusian Horse': 'ANDA',
+            'Falster Carriage Horse': 'FCH',
+        };
+        return (breedStr in breedMap) ? breedMap[breedStr] : breedStr;
+    };
     const infos = {
-        id: getInfoRow(dataString,"ID"),
-        name: getInfoRow(dataString,"Registered name"),
-        // TODO map to enum
-        sex: getInfoRow(dataString,"Sex"),
-        // TODO map to abbreviations
-        breed: getInfoRow(dataString,"Breed:","["),
-        // TODO map to enum
-        type: getInfoRow(dataString,"Type","type"),
-        height: getInfoRow(dataString,"eight:","(").split(" ")[0],
-        born: getInfoRow(dataString,"Birthday").split(" ")[3],
-    }
+        id: getInfoValue(dataString,"ID"),
+        name: extractHorseName(getInfoValue(dataString,"Registered name")),
+        sex: getInfoValue(dataString,"Sex").toLowerCase(),
+        breed: abbrBreed(getInfoValue(dataString,"Breed:","[")),
+        type: getInfoValue(dataString,"Type","type").toLowerCase(),
+        height: getInfoValue(dataString,"eight:","(").split(" ")[0],
+        born: getInfoValue(dataString,"Birthday").split(" ")[3],
+    };
 
     console.log(infos)
-}
+    return infos;
+};
 
 export {parseHorseInfo};

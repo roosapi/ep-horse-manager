@@ -16,7 +16,7 @@ export class HorseDatabase {
                                     horses(
                                      id     INT PRIMARY KEY, 
                                      name   TEXT, 
-                                     sex    INT, 
+                                     sex    TEXT, 
                                      breed  TEXT, 
                                      type   TEXT, 
                                      height INT,
@@ -31,8 +31,8 @@ export class HorseDatabase {
         try {
             // TODO add rest of the horse properties(,birthyear,sire_id,dam_id)
             const insertQuery = this.#horseDB.prepare(
-                `INSERT INTO horses (id,name,sex,breed,type,height) 
-                VALUES (@id,@name,@sex,@breed,@type,@height)`
+                `INSERT INTO horses (id,name,sex,breed,type,height,born) 
+                VALUES (@id,@name,@sex,@breed,@type,@height,@born)`
             )
 
             const transaction = this.#horseDB.transaction(() => {
@@ -45,6 +45,7 @@ export class HorseDatabase {
             transaction()
             return true;
         } catch (err) {
+            // TODO add handling when the horse already is in database
             console.error(err)
             throw err
         }
