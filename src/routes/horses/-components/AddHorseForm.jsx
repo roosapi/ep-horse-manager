@@ -6,7 +6,6 @@ const insertHorse = (data) => {
 export const AddHorseForm = () => {
     const createHorse = async (formData) => {
         const data = Object.fromEntries(formData);
-        console.log(data)
         insertHorse(data)
 
         const db_success = await window.databaseAPI.addHorse(data);
@@ -16,6 +15,8 @@ export const AddHorseForm = () => {
          <form className="input-form" action={createHorse}>
             <label htmlFor="basic">Basic Information</label>
             <textarea name="basic" />
+            <label htmlFor="skills">Training Page</label>
+            <textarea name="skills" />
             <div>
                 <button type="submit" className="confirm-button">Add Horse</button>
                 <span />

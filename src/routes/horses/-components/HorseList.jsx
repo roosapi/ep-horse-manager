@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+
+// TODO display discipline information correctly
 const HorseListItem = ({horse}) => {
     return (
     <tr>

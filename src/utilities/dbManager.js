@@ -24,7 +24,19 @@ export class HorseDatabase {
                                      sire   INT,
                                      dam    INT
                                      )`);
+
+        const createSkillsTable = this.#horseDB.prepare(`CREATE TABLE IF NOT EXISTS 
+                                    skillstats(
+                                     horse_id   INT FORGEIN KEY, 
+                                     discp_name TEXT, 
+                                     skill1     INT, 
+                                     skill2     INT,
+                                     skill3     INT,
+                                     skill4     INT,
+                                     skill5     INT
+                                     )`);
         createHorseTable.run();
+        createSkillsTable.run();
     }
 
     insertHorse = (props) => {
@@ -53,7 +65,8 @@ export class HorseDatabase {
 
     getHorses = () => {
         try {
-            const query = `SELECT * FROM horses`
+            const query = `SELECT * FROM horses 
+                            LEFT JOIN skillstats ON horses.id = skillstats.horse_id`
             const readQuery = this.#horseDB.prepare(query)
             const rowList = readQuery.all()
             return rowList
@@ -62,6 +75,29 @@ export class HorseDatabase {
             throw err
         }
     }
+
+    /* 'skills' should be an array of skill objects for one discipline each*/
+    insertSkills = (skills) => {
+        try {
+            const insertQuery = this.#horseDB.prepare(
+                `INSERT INTO skillstats (horse_id,discp_name,skill1,skill2,skill3,skill4,skill5) 
+                VALUES (@horse_id,@discipline,@skill1,@skill2,@skill3,@skill4,@skill5)`
+            );
+
+            const insertMany = this.#horseDB.transaction(() => {
+                for (const discp of skills) insertQuery.run(discp);
+            });
+
+            insertMany();
+            return true;
+        } catch (err) {
+            // TODO add handling when the horse already is in database
+            console.error(err)
+            throw err
+        }
+    }
+
+
 
     closeConnection = () => {
         this.#horseDB.close()

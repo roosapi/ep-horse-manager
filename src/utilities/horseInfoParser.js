@@ -3,12 +3,12 @@ import * as typedefs from './typedefs';
 // Receives an object from the form: {basic: TEXT, ...}
 // Returns an object with relevant information extracted.
 const parseHorseInfo = (horseData) => {
-    const {basic} = horseData;
+    const {basic,skills} = horseData;
 
-    // Take everything from "General data" to "Pedigree" (includes basic information, personality, conformation)
-    const relevantData = sliceBetweenStr(basic,"General data","Pedigree")
-    //console.log(relevantData)
-    return extractBasicInfo(basic);
+    const basicData = extractBasicInfo(basic);
+    const skillsData = extractSkillsData(basicData.id,skills);
+
+    return {'basic':basicData,'skills':skillsData}
 }
 
 /**
@@ -74,6 +74,46 @@ const extractBasicInfo = (dataString) => {
 
     console.log(infos)
     return infos;
+};
+
+const extractSkillsData = (horseId,skillsString) => {
+    const discpStrings = ['Dressage','Show Jumping',
+        'Cross Country','Horse Driving', 'Gaited Competitions',
+        'Reining', 'Endurance', 'Flat Racing', 'Baroque Riding', 
+        'Trail', 'Horse Logging','Legal Notice']; // Include 'Legal Notice' only as an end string for logging
+    const maxIdx = discpStrings.length -1;
+    let discpInfos = []
+    for (let i=0; i < maxIdx; i++) {
+        
+        const discp = discpStrings[i];
+        let discpInfo = {'horse_id':horseId,'discipline':discp};
+        // The discipline endurance has a sub-skill called endurance, so make sure to cut at "training for discipline"
+        const discpStr = sliceBetweenStr(skillsString,'training for '+discp,discpStrings[i+1]).slice('Basic training');
+        const skillRows = discpStr.trim().split('\n');
+ 
+        // Depending on the width of the horse page when it is copied,
+        // the layout of the skills data is differrent.
+        // TODO write nicer
+        if (skillRows.length == 7) {
+            // We take last 5 rows: those are the skills in format:
+            // "current / total 	skillname" where we want the 'total'
+            for (let skillIdx = 2;skillIdx < 7;skillIdx++) {
+                const skillRow = skillRows[skillIdx].trim();
+                const skillVal = skillRow.split(' ')[2];
+                discpInfo['skill'+(skillIdx-1)] = skillVal;
+            }
+        } else {
+            // We take rows 4,6,8,10,12 which only inlcude the 'current / total ' numbers
+            let rowIdx = [4,6,8,10,12];
+            for (let skillIdx = 0;skillIdx < 5;skillIdx++) {
+                const skillRow = skillRows[rowIdx[skillIdx]].trim();
+                const skillVal = skillRow.split(' ')[2];
+                discpInfo['skill'+(skillIdx+1)] = skillVal;
+            }
+        }
+        discpInfos.push(discpInfo);
+    }
+    return discpInfos;
 };
 
 export {parseHorseInfo};
