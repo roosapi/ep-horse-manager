@@ -78,10 +78,7 @@ const extractBasicInfo = (dataString) => {
 };
 
 const extractSkillsData = (horseId,skillsString) => {
-    const discpStrings = ['Dressage','Show Jumping',
-        'Cross Country','Horse Driving', 'Gaited Competitions',
-        'Reining', 'Endurance', 'Flat Racing', 'Baroque Riding', 
-        'Trail', 'Horse Logging','Legal Notice']; // Include 'Legal Notice' only as an end string for logging
+    const discpStrings = Object.keys(Constants.disciplines).concat(['Legal Notice']); // Include 'Legal Notice' only as an end string for logging
     const maxIdx = discpStrings.length -1;
     let discpInfos = []
     for (let i=0; i < maxIdx; i++) {

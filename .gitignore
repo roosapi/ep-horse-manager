@@ -93,3 +93,6 @@ out/
 
 # VS code settings
 .vscode/
+
+# Database
+database/
