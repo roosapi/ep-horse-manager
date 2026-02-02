@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 
 import * as Constants from '../../../utilities/constants'
 
@@ -72,7 +72,10 @@ const HorseList = () => {
                 <th>H (cm)</th>
                 <th>Born</th>
                 {[...Constants.disciplineMap.keys()].map((discp) => (
-                    <th colSpan="6">{discp}</th>
+                    <Fragment key={Constants.disciplineMap.get(discp)} >
+                    <th colSpan="5">{discp}</th>
+                    <th >∑</th>
+                    </Fragment>
                 ))}
                 </tr>
             {horseListItems}
