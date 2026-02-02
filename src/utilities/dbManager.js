@@ -1,3 +1,5 @@
+import * as Constants from './constants'
+
 const Database = require("better-sqlite3")
 
 
@@ -65,10 +67,24 @@ export class HorseDatabase {
 
     getHorses = () => {
         try {
-            const query = `SELECT * FROM horses 
-                            LEFT JOIN skillstats ON horses.id = skillstats.horse_id`
-            const readQuery = this.#horseDB.prepare(query)
-            const rowList = readQuery.all()
+            let qString = `SELECT
+                                horses.*,`;
+            
+            // Pivot the Discipline table contents to have all disciplines on one row per horse
+            for (const discp in Constants.disciplines) {
+                let abbrv = Constants.disciplines[discp];
+                for (let i=1;i<6;i++) {
+                    let skillNo = 'skill'+i;
+                    let addStr = `CASE WHEN skillstats.discp_name = '${discp}' THEN skillstats.${skillNo} END AS ${abbrv}_${skillNo},`;
+                    qString = qString + addStr;
+                }
+            }
+
+            qString = qString.slice(0,qString.length-1) + ` FROM horses
+                                LEFT JOIN skillstats ON horses.id = skillstats.horse_id
+                                GROUP BY horses.id;` 
+            const readQuery = this.#horseDB.prepare(qString);
+            const rowList = readQuery.all();
             return rowList
         } catch (err) {
             console.error(err)

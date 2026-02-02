@@ -1,4 +1,5 @@
 import * as typedefs from './typedefs';
+import * as Constants from './constants'
 
 // Receives an object from the form: {basic: TEXT, ...}
 // Returns an object with relevant information extracted.
