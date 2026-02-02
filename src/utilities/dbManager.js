@@ -71,14 +71,13 @@ export class HorseDatabase {
                                 horses.*,`;
             
             // Pivot the Discipline table contents to have all disciplines on one row per horse
-            for (const discp in Constants.disciplines) {
-                let abbrv = Constants.disciplines[discp];
+            Constants.disciplineMap.forEach((abbrv,discp,map) => {
                 for (let i=1;i<6;i++) {
                     let skillNo = 'skill'+i;
                     let addStr = `MAX(CASE WHEN skillstats.discp_name = '${discp}' THEN skillstats.${skillNo} END) AS ${abbrv}_${skillNo},`;
                     qString = qString + addStr;
                 }
-            }
+            });
 
             qString = qString.slice(0,qString.length-1) + ` FROM horses
                                 LEFT JOIN skillstats ON horses.id = skillstats.horse_id

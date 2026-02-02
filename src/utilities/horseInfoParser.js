@@ -78,9 +78,9 @@ const extractBasicInfo = (dataString) => {
 };
 
 const extractSkillsData = (horseId,skillsString) => {
-    const discpStrings = Object.keys(Constants.disciplines).concat(['Legal Notice']); // Include 'Legal Notice' only as an end string for logging
+    const discpStrings = [...Constants.disciplineMap.keys()].concat(['Legal Notice']); // Include 'Legal Notice' only as an end string for logging
     const maxIdx = discpStrings.length -1;
-    let discpInfos = []
+    let discpInfos = [];
     for (let i=0; i < maxIdx; i++) {
         
         const discp = discpStrings[i];
