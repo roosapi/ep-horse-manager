@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@tanstack/react-router": "^1.157.15",
+    "@tanstack/react-table": "^8.21.3",
     "@vitejs/plugin-react": "^5.1.2",
     "better-sqlite3": "^12.6.2",
     "electron-squirrel-startup": "^1.0.1",
