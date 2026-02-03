@@ -12,3 +12,7 @@
     flex-direction: column;
     max-width: 300px;
 }
+
+.active-button {
+    border: 2px solid red;
+}
