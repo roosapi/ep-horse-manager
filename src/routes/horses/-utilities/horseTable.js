@@ -52,7 +52,7 @@ const getHorseColumns = (columnHelper) => {
                 columns: [...Constants.disciplineMap.keys()].map((discp) => (
                     columnHelper.group({
                         header:discp,
-                        id:discp.toLowerCase(),
+                        id:discp,
                         columns: getSkillColumns(discp,columnHelper)
                     })
                 ))

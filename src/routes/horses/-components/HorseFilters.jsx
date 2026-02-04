@@ -6,12 +6,21 @@ const HorseFilter = ({colVisibility,onColumnToggle}) => {
         <div>
             <div> 
             {/* 
-            This works for other columns, but not for header groups: see TODO in index.js.
+            Test buttons
             */}
             <button 
-                onClick={() => onColumnToggle('dressage')}
+                onClick={() => onColumnToggle('type')}
                 className={
-                        colVisibility['dressage']
+                        colVisibility['type']
+                            ? "active-button"
+                            : ""
+                    }
+                >
+                    Type</button>
+            <button 
+                onClick={() => onColumnToggle('Dressage')}
+                className={
+                        colVisibility['Dressage']
                             ? "active-button"
                             : ""
                     }

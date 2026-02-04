@@ -19,29 +19,26 @@ const HorsePage = () => {
 
     const horseTable = createHorseTable(horseData,columnVisibility,setColumnVisibility);
 
-
     useEffect(() => {
         window.databaseAPI.getHorses().then(setHorseData);
     },[]);
 
+    /**
+     * Toggle visibility for column group colId
+     * @param {string} colId 
+     */
     function toggleVisibility (colId) { 
-        // TODO need to update all the cols under the discipline grouping
-        // individually  something like:
-/*          const group = table.getColumn(groupId);
-            const updates = Object.fromEntries(
-                group.getLeafColumns().map(col => [col.id, false])
-            );
-            setColumnVisibility(prev => ({ ...prev, ...updates })); */
-        if (colId in Constants.disciplineMap.keys()) {
-            console.log('toggle discipline',colId)
-        }
-
-        setColumnVisibility(() => {
-                        const newVis =  {...columnVisibility}
-                        newVis[colId] = (colId in columnVisibility) ? !columnVisibility[colId] : false
-                        return newVis
-                    })
-        }
+        setColumnVisibility((prev) => {
+            let updates = {[colId]:(colId in prev) ? !prev[colId] : false}
+            if (Constants.disciplineMap.has(colId)) {
+                const subColumns =horseTable.getColumn(colId).getLeafColumns();
+                updates = Object.fromEntries(        
+                    subColumns.map(col => (col.id in prev) ? [col.id,!prev[col.id]] : [col.id, false])
+                );
+            }
+            return { ...prev, ...updates }
+        });
+    }
     
 
     return (
