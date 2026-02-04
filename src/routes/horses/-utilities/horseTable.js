@@ -8,7 +8,6 @@ export class HorseTable {
     #columnHelper;
     #horseColumns;
 
-
     constructor(useData,columnVisibility) {
         this.#columnHelper = createColumnHelper();
         console.log('colhelp',this.#columnHelper)

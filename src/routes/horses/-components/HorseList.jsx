@@ -1,17 +1,13 @@
-import { useEffect, useState, Fragment, useMemo } from 'react';
 import { flexRender } from '@tanstack/react-table';
 
-import * as Constants from '../../../utilities/constants';
-import { HorseTable } from '../-utilities/horseTable';
 
+/**
+ * 
+ * @param {horseTable} an instance of HorseTable; a wrapper for react-table with interface to access headers, rows, etc.
+ * @returns A table of all the horses in horseData
+ */
+const HorseList = ({horseTable}) => {
 
-const HorseList = ({columnVisibility,setColumnVisibility}) => {
-    const [horseData, setHorseData] = useState([]);
-    const horseTable = new HorseTable(horseData,columnVisibility);
-
-    useEffect(() => {
-        window.databaseAPI.getHorses().then(setHorseData);
-    },[]);
 
     return ( 
     <table className="horse-table">
