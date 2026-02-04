@@ -3,11 +3,10 @@ import { flexRender } from '@tanstack/react-table';
 
 /**
  * 
- * @param {horseTable} an instance of HorseTable; a wrapper for react-table with interface to access headers, rows, etc.
+ * @param {horseTable} a react-table 
  * @returns A table of all the horses in horseData
  */
 const HorseList = ({horseTable}) => {
-
 
     return ( 
     <table className="horse-table">
@@ -32,7 +31,7 @@ const HorseList = ({horseTable}) => {
             ))}
         </thead>
         <tbody>
-            {horseTable.getRows().map((row) => (
+            {horseTable.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
@@ -48,4 +47,4 @@ const HorseList = ({horseTable}) => {
 
 
 
-export default HorseList;
+export {HorseList};
