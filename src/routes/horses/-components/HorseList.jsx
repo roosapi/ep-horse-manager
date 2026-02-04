@@ -1,27 +1,17 @@
 import { useEffect, useState, Fragment, useMemo } from 'react';
-import { createColumnHelper, useReactTable, getCoreRowModel, flexRender } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 
-import * as Constants from '../../../utilities/constants'
+import * as Constants from '../../../utilities/constants';
+import { HorseTable } from '../-utilities/horseTable';
+
 
 const HorseList = ({columnVisibility,setColumnVisibility}) => {
-    console.log('horselist',columnVisibility)
     const [horseData, setHorseData] = useState([]);
-    const horseColumns = useMemo(getHorseColumns,[]);
+    const horseTable = new HorseTable(horseData,columnVisibility);
 
     useEffect(() => {
         window.databaseAPI.getHorses().then(setHorseData);
     },[]);
-
-    const horseTable = useReactTable({
-        data: horseData,
-        columns: horseColumns,
-        getCoreRowModel: getCoreRowModel(),
-        state: {
-            columnVisibility:columnVisibility,
-        },
-        onColumnVisibilityChange: setColumnVisibility,
-    });
-
 
     return ( 
     <table className="horse-table">
@@ -46,7 +36,7 @@ const HorseList = ({columnVisibility,setColumnVisibility}) => {
             ))}
         </thead>
         <tbody>
-            {horseTable.getRowModel().rows.map((row) => (
+            {horseTable.getRows().map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
@@ -60,65 +50,6 @@ const HorseList = ({columnVisibility,setColumnVisibility}) => {
     );
 }
 
-const getHorseColumns = () => {
-    const columnHelper = createColumnHelper();
-    const horseColumns = [
-        columnHelper.group({
-            header:'Basic Information',
-            columns: [
-                columnHelper.accessor('id', {
-                    header: () => 'ID'
-                }),                
-                columnHelper.accessor('name', {
-                    header: () => 'Name'
-                }),
-                columnHelper.accessor('sex', {
-                    header: () => 'Sex'
-                }),
-                columnHelper.accessor('breed', {
-                    header: () => 'Breed'
-                }),
-                columnHelper.accessor('type', {
-                    header: () => 'Type'
-                }),
-                columnHelper.accessor('height', {
-                    header: () => 'H (cm)'
-                }),
-                columnHelper.accessor('born', {
-                    header: () => 'Born'
-                })
-            ]
-        }),
-        columnHelper.group({
-            header:'Skills',
-            columns: [...Constants.disciplineMap.keys()].map((discp) => (
-                columnHelper.group({
-                    header:discp,
-                    id:discp.toLowerCase(),
-                    columns: getSkillColumns(discp,columnHelper)
-                })
-            ))
-        }),
-    ];
-    return horseColumns;
-}
 
-const getSkillColumns = (discp,columnHelper) => {
-        const abbrv = Constants.disciplineMap.get(discp);
-        const colNames = [1,2,3,4,5].map((idx) => (abbrv+`_skill${idx}`));
-        const baseCols = colNames.map((cName) => (
-                    columnHelper.accessor(cName, {
-                        header:'',
-                    })
-        ));
-        const sumCol = columnHelper.display({
-            id:abbrv+'_sum',
-            header:'∑',
-            cell: (info) => colNames.reduce(
-                (total,cellName)=>info.row.original[cellName] + total,
-                0)
-        });
-        return baseCols.concat(sumCol);
-    };
 
 export default HorseList;
