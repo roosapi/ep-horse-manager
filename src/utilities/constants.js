@@ -13,5 +13,8 @@ const disciplineMap = new Map([
   ['Horse Logging', 'HL']
 ]);
 
+const defaultHideColumns = new Set(['Dressage','Show Jumping', 'Cross Country','Horse Driving',
+                                    'Gaited Competitions','Reining','Endurance','Flat Racing','Horse Logging']);
 
-export {disciplineMap}
+
+export {disciplineMap, defaultHideColumns}
