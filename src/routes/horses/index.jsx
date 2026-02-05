@@ -53,8 +53,9 @@ const HorsePage = () => {
 
     // Keep track of state for filters and visibility
     const [columnVisibility, setColumnVisibility] = useState(getDefaultColVisibility());
+    const [sorting, setSorting] = useState([]);
     const [horseData, setHorseData] = useState([]);
-    const horseTable = createHorseTable(horseData,columnVisibility,setColumnVisibility);
+    const horseTable = createHorseTable(horseData,columnVisibility,setColumnVisibility,sorting,setSorting);
 
     useEffect(() => {
         window.databaseAPI.getHorses().then(setHorseData);

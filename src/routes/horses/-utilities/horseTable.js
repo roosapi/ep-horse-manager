@@ -1,7 +1,12 @@
-import { createColumnHelper, useReactTable, getCoreRowModel} from '@tanstack/react-table';
+import { 
+    createColumnHelper, 
+    useReactTable, 
+    getCoreRowModel,
+    getSortedRowModel
+} from '@tanstack/react-table';
 import * as Constants from '../../../utilities/constants'
 
-export const createHorseTable = (horseData,columnVisibility, setColumnVisibility) => {
+export const createHorseTable = (horseData,columnVisibility, setColumnVisibility,sorting,setSorting) => {
     const columnHelper = createColumnHelper();
     const horseColumns = getHorseColumns(columnHelper);
 
@@ -9,10 +14,13 @@ export const createHorseTable = (horseData,columnVisibility, setColumnVisibility
                 data: horseData,
                 columns: horseColumns,
                 getCoreRowModel: getCoreRowModel(),
+                getSortedRowModel: getSortedRowModel(),
                 state: {
+                    sorting: sorting,
                     columnVisibility: columnVisibility,
                 },
                 onColumnVisibilityChange: setColumnVisibility,
+                onSortingChange:setSorting,
             });
     
 };
@@ -68,13 +76,12 @@ const getSkillColumns = (discp, columnHelper) => {
         if (Constants.combiDisciplinesMap.has(discp)) {
             const baseDiscps = Constants.combiDisciplinesMap.get(discp);
             const colNames = baseDiscps.map((base_abbrv) => [1,2,3,4,5].map((idx) => (base_abbrv+`_skill${idx}`))).flat();
-            const sumCol = columnHelper.display({
-                        id:abbrv+'_sum',
-                        header:'∑',
-                        cell: (info) => colNames.reduce(
-                            (total,cellName)=>info.row.original[cellName] + total,
-                            0)
-                    });
+            const sumCol = columnHelper.accessor( row =>
+                            colNames.reduce((total,cellName)=>row[cellName] + total, 0),
+                            {                
+                                id:abbrv+'_sum',
+                                header:'∑',
+                            });
             return [sumCol];
         } else {
             const colNames = [1,2,3,4,5].map((idx) => (abbrv+`_skill${idx}`));
@@ -83,13 +90,12 @@ const getSkillColumns = (discp, columnHelper) => {
                             header:'',
                         })
             ));
-            const sumCol = columnHelper.display({
-                id:abbrv+'_sum',
-                header:'∑',
-                cell: (info) => colNames.reduce(
-                    (total,cellName)=>info.row.original[cellName] + total,
-                    0)
-            });
+            const sumCol = columnHelper.accessor(row =>
+                        colNames.reduce((total,cellName)=>row[cellName] + total, 0),
+                        {
+                            id:abbrv+'_sum',
+                            header:'∑',
+                        });
             return baseCols.concat(sumCol);
         }
 };

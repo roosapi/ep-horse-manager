@@ -10,14 +10,13 @@ const HorseList = ({horseTable}) => {
 
     return ( 
     <table className="horse-table">
-        {console.log('horsetable',horseTable.getState())}
         <thead>
             {
                 horseTable.getHeaderGroups().map(headerGroup => (
                     
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
-                                <th key={header.id} colSpan={header.colSpan}>
+                                <th key={header.id} colSpan={header.colSpan}  onClick={header.column.getToggleSortingHandler()}>
                                 {header.isPlaceholder
                                 ? null
                                 : flexRender(
