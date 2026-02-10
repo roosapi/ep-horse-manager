@@ -2,11 +2,16 @@ import {
     createColumnHelper, 
     useReactTable, 
     getCoreRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    getFilteredRowModel,
 } from '@tanstack/react-table';
 import * as Constants from '../../../utilities/constants'
 
-export const createHorseTable = (horseData,columnVisibility, setColumnVisibility,sorting,setSorting) => {
+export const createHorseTable = (
+    horseData,
+    columnVisibility, setColumnVisibility,
+    sorting,setSorting,
+    columnFilters,setColumnFilters) => {
     const columnHelper = createColumnHelper();
     const horseColumns = getHorseColumns(columnHelper);
     return useReactTable({
@@ -14,12 +19,15 @@ export const createHorseTable = (horseData,columnVisibility, setColumnVisibility
                 columns: horseColumns,
                 getCoreRowModel: getCoreRowModel(),
                 getSortedRowModel: getSortedRowModel(),
+                getFilteredRowModel: getFilteredRowModel(),
                 state: {
                     sorting: sorting,
                     columnVisibility: columnVisibility,
+                    columnFilters: columnFilters,
                 },
                 onColumnVisibilityChange: setColumnVisibility,
                 onSortingChange:setSorting,
+                onColumnFiltersChange: setColumnFilters,
             });
     
 };
@@ -33,9 +41,9 @@ const getHorseColumns = (columnHelper) => {
                 header:'Basic Information',
                 columns: ['ID','Name','Sex','Breed','Type','Height','Born'].map((infoName) => {
                     const id = infoName.toLowerCase();
-                    console.log(infoName)
                     return columnHelper.accessor(id, {
                                     id:id,
+                                    filterFn: 'includesString',
                                     header: () => {
                                             return (
                                                 <div style={{ display: 'flex', flexDirection: 'column' }}>

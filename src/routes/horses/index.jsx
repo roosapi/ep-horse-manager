@@ -51,11 +51,27 @@ const HorsePage = () => {
         });
     }
 
+    /**
+     * Set filter value for colId. Use value=null to remove filter.
+     * @param {string} colId 
+     * @param {any} value - new value for filter 
+     */
+    const setFilter = (colId,value) => { 
+        setColumnFilters((prev) => {
+            const prevNoNew = prev.filter(fCol => fCol.id !== colId);
+            if (value===null) {
+                return prevNoNew;
+            }
+            return [...prevNoNew,{id:colId,value}];
+        });
+    }
+
     // Keep track of state for filters and visibility
     const [columnVisibility, setColumnVisibility] = useState(getDefaultColVisibility());
     const [sorting, setSorting] = useState([]);
+    const [columnFilters, setColumnFilters] = useState([]);
     const [horseData, setHorseData] = useState([]);
-    const horseTable = createHorseTable(horseData,columnVisibility,setColumnVisibility,sorting,setSorting);
+    const horseTable = createHorseTable(horseData,columnVisibility,setColumnVisibility,sorting,setSorting,columnFilters,setColumnFilters);
 
     useEffect(() => {
         window.databaseAPI.getHorses().then(setHorseData);
@@ -65,7 +81,12 @@ const HorsePage = () => {
     return (
         <>
         <h1>Horses</h1>
-        <HorseFilter  colVisibility={columnVisibility} onColumnToggle={toggleVisibility} />
+        <HorseFilter 
+            colVisibility={columnVisibility} 
+            onColumnToggle={toggleVisibility} 
+            colFilters={columnFilters}
+            onSetColumnFilter={setFilter}
+            />
         <HorseList horseTable={horseTable} />
         </>
     )

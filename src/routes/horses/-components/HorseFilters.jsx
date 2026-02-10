@@ -1,9 +1,19 @@
+import { useMemo } from 'react';
 import * as Constants from '../../../utilities/constants'
 
-const ToggleButton = ({buttonID,buttonText, isToggled, onColumnToggle}) => {
+const ToggleButton = ({toggleType,colID,buttonID,buttonText, isToggled, onButtonToggle}) => {
     return (     
         <button
-        onClick={() => onColumnToggle(buttonID)}
+        onClick={() => {
+            switch (toggleType) {
+                case 'visibility':
+                    onButtonToggle(colID);
+                    break;
+                case 'filter':
+                    isToggled ? onButtonToggle(colID,null) : onButtonToggle(colID,buttonID);
+                    break;
+            }
+           }}
         className={
                 isToggled
                     ? "active-button"
@@ -15,7 +25,15 @@ const ToggleButton = ({buttonID,buttonText, isToggled, onColumnToggle}) => {
     );
 };
 
-const HorseFilter = ({colVisibility,onColumnToggle}) => {
+
+const HorseFilter = ({colVisibility,onColumnToggle,colFilters,onSetColumnFilter}) => {
+
+    const activeFilters = useMemo(() => {
+            const active = new Set([]);
+            colFilters.forEach(filter => active.add(filter.value));
+            return active;          
+        },[colFilters])
+
     return (
         <div>
             Show columns:
@@ -24,10 +42,12 @@ const HorseFilter = ({colVisibility,onColumnToggle}) => {
                 {['Name','Sex','Breed','Type','Height','Born'].map(col => (
                     <ToggleButton 
                         key={col+'_toggle'}
-                        buttonID={col.toLocaleLowerCase()}
+                        toggleType={'visibility'}
+                        colID={col.toLocaleLowerCase()}
+                        buttonID={col+'_toggle'}
                         buttonText={col} 
                         isToggled={(col.toLocaleLowerCase() in colVisibility) ? colVisibility[col.toLocaleLowerCase()] : true} 
-                        onColumnToggle={onColumnToggle}/>
+                        onButtonToggle={onColumnToggle}/>
                 ))}
             </div>
             <div>
@@ -35,24 +55,29 @@ const HorseFilter = ({colVisibility,onColumnToggle}) => {
                 {Array.from(Constants.disciplineMap.keys()).map(discp => (
                     <ToggleButton 
                         key={discp+'_toggle'}
-                        buttonID={discp}
+                        toggleType={'visibility'}
+                        colID={discp}
+                        buttonID={discp+'_toggle'}
                         buttonText={discp} 
                         isToggled={(discp in colVisibility) ? colVisibility[discp] : true} 
-                        onColumnToggle={onColumnToggle}/>
+                        onButtonToggle={onColumnToggle}/>
                 ))}
             </div>
             <div> 
-
-{/*             <button 
-                onClick={() => onColumnToggle('type')}
-                className={
-                        colVisibility['type']
-                            ? "active-button"
-                            : ""
-                    }
-                >
-                    Type</button> */}
-
+                Filter:
+                <div>
+                    Sex:
+                    {['Stallion','Mare'].map(col => (
+                        <ToggleButton 
+                            key={col+'_toggle'}
+                            toggleType={'filter'}
+                            colID={'sex'}
+                            buttonID={col.toLocaleLowerCase()}
+                            buttonText={col} 
+                            isToggled={activeFilters.has(col.toLocaleLowerCase())} 
+                            onButtonToggle={onSetColumnFilter}/>
+                    ))}
+                </div>
 
             </div>
             
