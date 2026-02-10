@@ -19,6 +19,7 @@ async function handleAddHorse (event,horse_data) {
   // TODO parse horse data
   const parsedData = HorseParser.parseHorseInfo(horse_data);
   const is_success_addhorse = db.insertHorse(parsedData.basic);
+  const is_success_addstats = db.insertStats(parsedData.stats);
   const is_success = db.insertSkills(parsedData.skills);
   console.log('database insert successful:',is_success)
   return is_success;

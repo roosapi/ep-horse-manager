@@ -9,7 +9,6 @@ import * as Constants from '../../../utilities/constants'
 export const createHorseTable = (horseData,columnVisibility, setColumnVisibility,sorting,setSorting) => {
     const columnHelper = createColumnHelper();
     const horseColumns = getHorseColumns(columnHelper);
-
     return useReactTable({
                 data: horseData,
                 columns: horseColumns,
@@ -53,6 +52,39 @@ const getHorseColumns = (columnHelper) => {
                     columnHelper.accessor('born', {
                         header: () => 'Born'
                     })
+                ]
+            }),
+            columnHelper.group({
+                header:'Personality',
+                columns: Constants.persoStats.map((stat) => (
+                    columnHelper.accessor(stat, {
+                        header: () => stat.slice(0,1),
+                    })
+                ))
+            }),
+            columnHelper.group({
+                header:'Conformation',
+                columns: [...Constants.confoStats.slice(0,4).map((stat) => (
+                    columnHelper.accessor(stat, {
+                        header: () => (stat === 'baseneck') ? 'bn' : stat.slice(0,2),
+                    })
+                )),
+                columnHelper.group({
+                    header:'Front Legs',
+                    columns: Constants.confoStats.slice(4,7).map((stat) => (
+                    columnHelper.accessor(stat, {
+                        header: () => stat.split('_')[1].slice(0,1),
+                    })
+                ))
+                }),
+                columnHelper.group({
+                    header:'Rear Legs',
+                    columns: Constants.confoStats.slice(7).map((stat) => (
+                    columnHelper.accessor(stat, {
+                        header: () => stat.split('_')[1].slice(0,1),
+                    })
+                ))
+                }),
                 ]
             }),
             columnHelper.group({

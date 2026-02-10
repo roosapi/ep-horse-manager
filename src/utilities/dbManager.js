@@ -26,7 +26,27 @@ export class HorseDatabase {
                                      sire   INT,
                                      dam    INT
                                      )`);
-
+        const createStatsTable = this.#horseDB.prepare(`CREATE TABLE IF NOT EXISTS 
+                                    horsestats(
+                                     horse_id   INT FORGEIN KEY, 
+                                     temp     INT, 
+                                     char     INT,
+                                     attspan     INT,
+                                     mind     INT,
+                                     handle     INT,
+                                     nerves     INT,
+                                     int     INT,
+                                     head       INT,
+                                     baseneck   INT,
+                                     neck       INT,
+                                     back       INT,
+                                     f_camp     INT,
+                                     f_base     INT,
+                                     f_toe      INT,
+                                     b_camp     INT,
+                                     b_base     INT,
+                                     b_toe      INT
+                                     )`);
         const createSkillsTable = this.#horseDB.prepare(`CREATE TABLE IF NOT EXISTS 
                                     skillstats(
                                      horse_id   INT FORGEIN KEY, 
@@ -38,6 +58,7 @@ export class HorseDatabase {
                                      skill5     INT
                                      )`);
         createHorseTable.run();
+        createStatsTable.run();
         createSkillsTable.run();
     }
 
@@ -68,7 +89,8 @@ export class HorseDatabase {
     getHorses = () => {
         try {
             let qString = `SELECT
-                                horses.*,`;
+                                horses.*,
+                                horsestats.*,`;
             
             // Pivot the Discipline table contents to have all disciplines on one row per horse
             Constants.disciplineMap.forEach((abbrv,discp,map) => {
@@ -80,6 +102,7 @@ export class HorseDatabase {
             });
 
             qString = qString.slice(0,qString.length-1) + ` FROM horses
+                                LEFT JOIN horsestats ON horses.id = horsestats.horse_id 
                                 LEFT JOIN skillstats ON horses.id = skillstats.horse_id
                                 GROUP BY horses.id;`;
 
@@ -87,6 +110,30 @@ export class HorseDatabase {
             return readQuery.all();
         } catch (err) {
             console.error(err)
+            throw err
+        }
+    }
+
+    insertStats = (stats) => {
+        try {
+            const insertQuery = this.#horseDB.prepare(
+                `INSERT INTO horsestats (horse_id,temp,char,attspan,mind,handle,nerves,int,head,baseneck,neck,back,f_camp,f_base,f_toe,b_camp,b_base,b_toe) 
+                VALUES (@horse_id,@temp,@char,@attspan,@mind,@handle,@nerves,@int,@head,@baseneck,@neck,@back,@f_camp,@f_base,@f_toe,@b_camp,@b_base,@b_toe)`
+            );
+
+            const transaction = this.#horseDB.transaction(() => {
+                const info = insertQuery.run(stats)
+                console.log(
+                    `Inserted ${info.changes} rows into horsestats`
+                )
+            });
+            transaction();
+            console.log('added stats:',stats)
+
+            return true;
+        } catch (err) {
+            // TODO add handling 
+            console.error('failed adding stats:',err)
             throw err
         }
     }

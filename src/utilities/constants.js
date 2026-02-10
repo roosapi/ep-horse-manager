@@ -1,3 +1,15 @@
+const persoStats = ['temp','char','attspan','mind','handle','nerves','int'];
+const confoStats = ['head','baseneck','neck','back','f_camp','f_base','f_toe','b_camp','b_base','b_toe'];
+const baseStats = persoStats.concat(confoStats);
+                    
+/* const persoMap = new Map([
+  ['Temperament','temp'],
+  ['Charisma','char'],
+  ['Attention span','attspan'],
+  ['Mind','mind'],
+  ['Handling','handle'],
+  ['']'nerves','int'
+]) */
 
 const disciplineMap = new Map([
   ['Dressage', 'DR'],
@@ -29,4 +41,4 @@ const defaultHideColumns = new Set(['Dressage','Show Jumping', 'Cross Country','
                                     'Eventing', 'Steeplechase','Endurance Driving']);
 
 
-export {disciplineMap, defaultHideColumns,combiDisciplinesMap}
+export {disciplineMap, defaultHideColumns,combiDisciplinesMap, persoStats, confoStats, baseStats}
