@@ -56,6 +56,7 @@ const HorsePage = () => {
      * @param {string} colId 
      * @param {any} value - new value for filter 
      */
+    // TODO: make it possible to have multiple active filters for e.g. breed
     const setFilter = (colId,value) => { 
         setColumnFilters((prev) => {
             const prevNoNew = prev.filter(fCol => fCol.id !== colId);
@@ -82,6 +83,7 @@ const HorsePage = () => {
         <>
         <h1>Horses</h1>
         <HorseFilter 
+            horseTable={horseTable}
             colVisibility={columnVisibility} 
             onColumnToggle={toggleVisibility} 
             colFilters={columnFilters}

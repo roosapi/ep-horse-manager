@@ -25,8 +25,9 @@ const ToggleButton = ({toggleType,colID,buttonID,buttonText, isToggled, onButton
     );
 };
 
-
-const HorseFilter = ({colVisibility,onColumnToggle,colFilters,onSetColumnFilter}) => {
+// TODO?: use the table object to directly set filters (and visibility)? 
+// (e.g. table.getColumn('name')?.setFilterValue('John')) OR table.setColumnFilters(...)
+const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetColumnFilter}) => {
 
     const activeFilters = useMemo(() => {
             const active = new Set([]);
@@ -78,6 +79,16 @@ const HorseFilter = ({colVisibility,onColumnToggle,colFilters,onSetColumnFilter}
                             onButtonToggle={onSetColumnFilter}/>
                     ))}
                 </div>
+                <div>Breed: {Array.from(horseTable.getColumn('breed').getUniqueValues()).map(col => (
+                        <ToggleButton 
+                            key={col+'_toggle'}
+                            toggleType={'filter'}
+                            colID={'breed'}
+                            buttonID={col.toLocaleLowerCase()}
+                            buttonText={col} 
+                            isToggled={activeFilters.has(col.toLocaleLowerCase())} 
+                            onButtonToggle={onSetColumnFilter}/>
+                    ))}</div>
 
             </div>
             

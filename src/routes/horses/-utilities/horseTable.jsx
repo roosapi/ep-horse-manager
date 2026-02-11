@@ -7,6 +7,15 @@ import {
 } from '@tanstack/react-table';
 import * as Constants from '../../../utilities/constants'
 
+const UniqueColValuesFeature = {
+                    createColumn: (column, table) => {
+                        column.getUniqueValues = () => {
+                            const values = table.getCoreRowModel().rows.map((row) => row.getValue(column.id));
+                            return Array.from(new Set(values)).filter(Boolean);
+                        };
+                    },
+                    };
+
 export const createHorseTable = (
     horseData,
     columnVisibility, setColumnVisibility,
@@ -28,6 +37,7 @@ export const createHorseTable = (
                 onColumnVisibilityChange: setColumnVisibility,
                 onSortingChange:setSorting,
                 onColumnFiltersChange: setColumnFilters,
+                _features: [UniqueColValuesFeature],
             });
     
 };
