@@ -10,5 +10,11 @@ export const Route = createFileRoute("/horses/add")({
         <AddHorseForm/>
         </>
     ),
+    errorComponent: ({error}) => (
+    <div>
+      <h2>Something went wrong</h2>
+      <pre>{error.message}</pre>
+    </div>
+    ),
 })
 

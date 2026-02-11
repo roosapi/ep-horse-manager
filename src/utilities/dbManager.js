@@ -78,11 +78,9 @@ export class HorseDatabase {
                 )
             })
             transaction()
-            return true;
+            return {isSuccess:true};
         } catch (err) {
-            // TODO add handling when the horse already is in database
-            console.error(err)
-            throw err
+            return {isSuccess:false,err};
         }
     }
 
@@ -109,7 +107,7 @@ export class HorseDatabase {
             const readQuery = this.#horseDB.prepare(qString); 
             return readQuery.all();
         } catch (err) {
-            console.error(err)
+            console.log('ERROR when inserting horse:',err)
             throw err
         }
     }
@@ -130,11 +128,9 @@ export class HorseDatabase {
             transaction();
             console.log('added stats:',stats)
 
-            return true;
+            return {isSuccess:true};
         } catch (err) {
-            // TODO add handling 
-            console.error('failed adding stats:',err)
-            throw err
+            return {isSuccess:false,err};
         }
     }
 
@@ -151,11 +147,9 @@ export class HorseDatabase {
             });
 
             insertMany();
-            return true;
+            return {isSuccess:true};
         } catch (err) {
-            // TODO add handling when the horse already is in database
-            console.error(err)
-            throw err
+            return {isSuccess:false,err};
         }
     }
 
