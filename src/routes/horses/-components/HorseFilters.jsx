@@ -1,5 +1,42 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo,useState } from 'react';
 import * as Constants from '../../../utilities/constants'
+
+/**
+ * 
+ * @param {Array} displayValues - an array of potential text values for the button
+ * @returns A button that cycles through display text values when clicked
+ */
+const DisplayToggleButton = ({displayValues, whichValue, onToggleValue}) => {
+    const numValues = displayValues.length;
+   return (     
+        <button
+        onClick={() => onToggleValue((oldVal) => (oldVal + 1) % numValues)}
+        >
+            {displayValues[whichValue]}
+        </button>
+    );
+}
+
+    const NumInputField = ({currentValue,onValueChanged}) => {
+        return <input type="number" value={currentValue} onChange={(e) => {
+             onValueChanged(e.target.value)
+            }}/>
+    }
+
+const NumFilterController = ({colId,onFilterChanged}) => {
+    const filterOptions = ['>','<','='];
+    const [filterType, setFilterType] = useState(0);
+    const [filterValue, setFilterValue] = useState(0);
+
+    useEffect(()=>onFilterChanged(colId,filterOptions[filterType],filterValue),[filterType, filterValue]);
+
+    return (
+        <>
+        <DisplayToggleButton displayValues={filterOptions} whichValue={filterType} onToggleValue={setFilterType}/>
+        <NumInputField currentValue={filterValue} onValueChanged={setFilterValue}/>
+        </>
+    )
+}
 
 const ToggleButton = ({toggleType,colID,buttonID,buttonText, isToggled, onButtonToggle}) => {
     return (     
@@ -33,7 +70,13 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
             const active = new Set([]);
             colFilters.forEach(filter => active.add(filter.value));
             return active;          
-        },[colFilters])
+        },[colFilters]);
+
+    const handleNumFilterChange = (colId,filterType,filterValue) => {
+        if (filterType === '>') onSetColumnFilter(colId,[filterValue,Number.MAX_SAFE_INTEGER]);
+        else if (filterType === '<') onSetColumnFilter(colId, [Number.MIN_SAFE_INTEGER,filterValue]);
+        else onSetColumnFilter(colId,[filterValue,filterValue]);
+    };
 
     return (
         <div>
@@ -67,6 +110,9 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
             <div> 
                 Filter:
                 <div>
+                    ID  <NumFilterController colId={'id'} onFilterChanged={handleNumFilterChange}/>
+                </div>
+                <div>
                     Sex:
                     {['Stallion','Mare'].map(col => (
                         <ToggleButton 
@@ -88,7 +134,25 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
                             buttonText={col} 
                             isToggled={activeFilters.has(col.toLocaleLowerCase())} 
                             onButtonToggle={onSetColumnFilter}/>
-                    ))}</div>
+                    ))}
+                </div>
+                <div>Type: {Array.from(horseTable.getColumn('type').getUniqueValues()).map(col => (
+                        <ToggleButton 
+                            key={col+'_toggle'}
+                            toggleType={'filter'}
+                            colID={'type'}
+                            buttonID={col.toLocaleLowerCase()}
+                            buttonText={col} 
+                            isToggled={activeFilters.has(col.toLocaleLowerCase())} 
+                            onButtonToggle={onSetColumnFilter}/>
+                    ))}
+                </div>
+                <div>
+                    Birth year  <NumFilterController colId={'born'} onFilterChanged={handleNumFilterChange}/>
+                </div>
+                <div>
+                    Height  <NumFilterController colId={'height'} onFilterChanged={handleNumFilterChange}/>
+                </div>
 
             </div>
             

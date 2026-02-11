@@ -53,7 +53,7 @@ const getHorseColumns = (columnHelper) => {
                     const id = infoName.toLowerCase();
                     return columnHelper.accessor(id, {
                                     id:id,
-                                    filterFn: 'includesString',
+                                    filterFn: ['id','height','born'].includes(id) ? 'inNumberRange' : 'equalsString',
                                     header: () => {
                                             return (
                                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
