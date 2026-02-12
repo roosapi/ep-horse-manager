@@ -9,12 +9,26 @@ const ErrorContainer = ({errorText}) => {
 
 };
 
-// TODO basic valudation (don't submit if empty)
 export const AddHorseForm = () => {
     const [activeError,setActiveError] = useState({
         isError:false,
         errorMessage:''
     });
+
+    const [formState,setFormState] = useState({
+        values: {
+            basic:'',
+            skills:'',
+        },
+        errors: {}
+    });
+
+    const onFieldEdited = (elem) => {
+        setFormState((prev) => ({
+            ...prev,
+            values:{ ...prev.values, [elem.name]: elem.value }
+        }))
+    }
 
     const handleInsertResult = (result) => {
         const { isHorseInserted, isSkillsInserted, isStatsInserted, errors = [] } = result;
@@ -37,19 +51,73 @@ export const AddHorseForm = () => {
             errorMessage = 'Horse inserted. Error insterting stats or skills: ' + errors.map((err)=>err.code).join(', ');
         }
         setActiveError({isError:true,errorMessage});
-    }
+    };
 
-    const createHorse = async (formData) => {
-        const data = Object.fromEntries(formData);
+    const validateForm = () => {
+        const rules = {
+            basic: [
+                ['General data','Conformation','Personality'],
+                "The passport page should include sections: General data, Conformation, and Personality"
+            ],
+            skills: [
+                ['Stamina','Ground manners'],
+                "The training page should include sections: Stamina, Ground manners, and desired disciplines."
+                
+            ]
+        };
+        let isValid = true;
+
+        for (const key in formState.values) {
+            const input = formState.values[key];
+            const fitsRules = rules[key][0]
+                .map((word)=>input.includes(word))
+                .reduce((acc,current) => acc && current, true);
+
+            if (!fitsRules) {
+                isValid = false;
+                setFormState((prev) => ({
+                    ...prev,
+                    errors:{ ...prev.errors, [key]: rules[key][1]}
+                }));
+            } else {
+                setFormState((prev) => ({
+                ...prev,
+                errors:{ ...prev.errors, [key]: ''}
+                }));
+            }
+        }
+        return isValid;
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault(); 
+        // validate
+        const isValid = validateForm();
+        if (!isValid) return;
+
+        createHorse(formState.values);
+        setFormState({
+            values: {
+                basic:'',
+                skills:'',
+            },
+            errors: {}
+        });
+    };
+
+    const createHorse = async (data) => {
         await window.databaseAPI.addHorse(data).then(handleInsertResult);
-    }
+    };
 
     return (
-         <form className="input-form" action={createHorse}>
+         <form className="input-form" onSubmit={handleSubmit}>
             <label htmlFor="basic">Basic Information</label>
-            <textarea name="basic" />
+            {formState.errors.basic ?? formState.errors.basic}
+            <textarea name="basic" onChange={(e)=>onFieldEdited(e.target)} value={formState.values.basic}/>
             <label htmlFor="skills">Training Page</label>
-            <textarea name="skills" />
+            {formState.errors.skills ?? formState.errors.skills}
+
+            <textarea name="skills" onChange={(e)=>onFieldEdited(e.target)} value={formState.values.skills}/>
             <div>
                 <button type="submit" className="confirm-button">Add Horse</button>
                 <span />
