@@ -65,6 +65,7 @@ const ToggleButton = ({toggleType,colID,buttonID,buttonText, isToggled, onButton
 // TODO?: use the table object to directly set filters (and visibility)? 
 // (e.g. table.getColumn('name')?.setFilterValue('John')) OR table.setColumnFilters(...)
 const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetColumnFilter}) => {
+    const [isFiltersVisible,setIsFiltersVisible] = useState(false);
 
     const activeFilters = useMemo(() => {
             const active = new Set([]);
@@ -79,7 +80,13 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
     };
 
     return (
+        <>
         <div>
+            <button id onClick={()=>{setIsFiltersVisible((prev)=>!prev)}}>
+                {isFiltersVisible ? 'Hide' : 'Show'} filter options</button>
+        </div>
+        {isFiltersVisible && 
+        <div id='filter-options-panel'>
             Show columns:
             <div>
                 Basic Info:
@@ -125,7 +132,12 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
                             onButtonToggle={onSetColumnFilter}/>
                     ))}
                 </div>
-                <div>Breed: {Array.from(horseTable.getColumn('breed').getUniqueValues()).map(col => (
+                <div>
+                    {// TODO refactor this to a function; memoise it; 
+                    // get breeds/types/etc from horsedata in parent instead of 
+                    // the table that is recreated every time something is manioulated
+                    }
+                    Breed: {Array.from(horseTable.getColumn('breed').getUniqueValues()).map(col => (
                         <ToggleButton 
                             key={col+'_toggle'}
                             toggleType={'filter'}
@@ -156,7 +168,9 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
 
             </div>
             
-        </div>
+        </div>}
+        
+        </>
     )
 }
 
