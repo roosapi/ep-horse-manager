@@ -77,11 +77,12 @@ const HorsePage = () => {
     useEffect(() => {
         window.databaseAPI.getHorses().then(setHorseData);
     },[]);
-    
+
 
     return (
         <>
         <h1>Horses</h1>
+        
         <HorseFilter 
             horseTable={horseTable}
             colVisibility={columnVisibility} 
@@ -91,5 +92,6 @@ const HorsePage = () => {
             />
         <HorseList horseTable={horseTable} />
         </>
+
     )
 }

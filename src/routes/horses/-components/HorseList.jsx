@@ -16,7 +16,9 @@ const HorseList = ({horseTable}) => {
                     
                     <tr key={headerGroup.id}>
                         {headerGroup.headers.map(header => (
-                                <th key={header.id} colSpan={header.colSpan}  onClick={header.column.getToggleSortingHandler()}>
+                                <th key={header.id} className={
+                                    (header.colSpan > 1 || header.id.includes('skill1') || header.id.includes('_sum'))? 'group-head':'' + ((header.isPlaceholder) ? ' empty' :'')
+                                    } colSpan={header.colSpan}  onClick={header.column.getToggleSortingHandler()}>
                                 {header.isPlaceholder
                                 ? null
                                 : flexRender(
@@ -33,7 +35,13 @@ const HorseList = ({horseTable}) => {
             {horseTable.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
+                <td key={cell.id} 
+                    className={
+                        cell.column.columnDef.meta?.getCellClass?.(
+                            cell.id,
+                            cell.getValue()
+                        ) ?? ""
+                    }>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}

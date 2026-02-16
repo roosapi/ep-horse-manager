@@ -82,12 +82,12 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
     return (
         <>
         <div>
-            <button id onClick={()=>{setIsFiltersVisible((prev)=>!prev)}}>
+            <button onClick={()=>{setIsFiltersVisible((prev)=>!prev)}}>
                 {isFiltersVisible ? 'Hide' : 'Show'} filter options</button>
         </div>
         {isFiltersVisible && 
         <div id='filter-options-panel'>
-            Show columns:
+            <div class="section-header">Show columns</div>
             <div>
                 Basic Info:
                 {['Name','Sex','Breed','Type','Height','Born'].map(col => (
@@ -115,7 +115,7 @@ const HorseFilter = ({horseTable,colVisibility,onColumnToggle,colFilters,onSetCo
                 ))}
             </div>
             <div> 
-                Filter:
+                <div class="section-header">Filters</div>
                 <div>
                     ID  <NumFilterController colId={'id'} onFilterChanged={handleNumFilterChange}/>
                 </div>

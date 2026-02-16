@@ -1,11 +1,53 @@
-.horse-table {
-    border-collapse: collapse;
+body {
+    background-color: #FFF8EB;
+    font-family: 'IBMPlex';
+    margin: 0;
 }
 
-.horse-table th, td {
-    padding: 3px 8px;
-    border-bottom:1px solid;
+@font-face {
+    font-family: 'IBMPlex';
+    src: url('./fonts/IBM_Plex_Sans/static/IBMPlexSans_Condensed-Regular.ttf');
 }
+
+@font-face {
+    font-family: 'Faustina';
+    src: url('./fonts/Faustina/static/Faustina-Regular.ttf');
+}
+
+
+/* MAIN MENU --------------------------------------------------------------- */
+ 
+#topbar {
+    background-color: #DE733D;
+    display: flex;
+}
+
+#topbar a {
+    display: inline-block;
+    padding: 8px 16px;
+    font:  bold 16px 'Faustina';
+    color:#401108;
+    text-decoration: none;
+    background-image: linear-gradient(#F4BC84);
+    background-size: 100% 0; 
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    transition: .3s, background-size .3s;
+}
+
+#topbar a:hover {
+    transition: background-size .3s ;
+    background-size: 100% 100%;
+    color: #873206;
+}
+
+/* MAIN BODY --------------------------------------------------------------- */
+
+
+#mainbody {
+    padding:16px 32px;
+}
+
 
 .input-form {
     display: flex;
@@ -15,4 +57,315 @@
 
 .active-button {
     border: 2px solid red;
+}
+
+/* TEXT ELEMENTS --------------------------------------------------------------- */
+
+
+h1 {
+    font-family: 'Faustina';
+}
+
+button {
+    font-family: 'Faustina';
+    line-height: 18px;
+    background-color: #DFE1E5;
+    border: #75859C 1px solid;
+    border-radius: 8px;
+    margin:2px 0px 2px 4px;
+    padding: 2px 8px;
+}
+
+button:hover {
+    background-color: #f4f6f8;
+}
+
+button:active {
+    background-color: #ffd3a7;
+}
+
+button.active-button {
+    background-color: #F4BC84;
+    border: #DE733D 1px solid;
+}
+
+button.active-button:hover {
+    background-color: #ffd3a7;
+    border: #DE733D 1px solid;
+}
+
+.active-button:active {
+    background-color: #f4f6f8;
+}
+
+
+/* HORSE FILTERS --------------------------------------------------------------- */
+
+#filter-options-panel {
+    font-family: 'Faustina';
+    font-size: 14px;
+    background-color: #FFFDF9;
+    border: #F4BC84 1px solid;
+    border-radius: 10px;
+    margin:8px 0 ;
+    padding: 8px 12px 16px 12px;
+}
+
+#filter-options-panel .section-header {
+    color:#401108;
+    font-weight: bold;
+    margin:8px;
+}
+
+#filter-options-panel input {
+    margin-left:4px;
+    border-radius: 5px;
+    border-color: #75859C;
+}
+
+/* HORSE TABLE --------------------------------------------------------------- */
+
+
+
+.horse-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+    margin-top:16px;
+    --skill-gradient-col-1: #e34747;/*#F48484;*/
+    --skill-gradient-col-2:#f2cb84; 
+    --skill-gradient-col-3:#9dd485; 
+    --skill-gradient-col-4: #93c3ff;/*#F48484;*/
+    --skill-gradient-col-5:#C193FF; 
+}
+
+
+.horse-table thead tr:first-child th{
+    background: #56657a;
+    color: #FFFDF9;
+    font-size: 16px;
+}
+
+.horse-table thead tr:nth-child(2) th{
+    background-color: #f2f3f4;
+    border:0;
+}
+
+.horse-table thead tr:nth-child(2) th.empty{
+    background-color: #75859C;
+    border:0;
+}
+
+.horse-table thead tr:nth-child(3) th{
+    color: black;
+    background-color: #75859C;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.horse-table  thead tr:nth-child(2) th.group-head {
+    border-left:#75859C 4px solid;
+}
+
+.horse-table  thead tr:nth-child(3) th.group-head {
+    border-left:#75859C 4px solid;
+}
+
+.horse-table th span {
+    display: table-cell;
+    padding:6px 0;
+    width:100%;
+    height: 15px;
+    border: #75859C 1px solid;
+    margin-left:-1px;
+}
+
+.horse-table td.empty {
+    background-color: #b9bdc4;
+    border:0;
+}
+
+.horse-table th div.summary-label {
+    display: flex;
+    flex-direction: column;
+    width:25px;
+    font-size:10px;
+}
+
+.horse-table th span:not(.empty){
+    background-color: #DFE1E5;
+    border-left:#75859C 1px solid;
+    border-right:#DFE1E5 1px solid;
+    border-bottom:#75859C 1px solid;    
+}
+
+.horse-table td {
+    border-left:#75859C 1px solid;
+    border-bottom:#DFE1E5 1px solid;
+    padding: 3px 8px;
+    background-color: #FFFDF9;
+}
+
+
+.horse-table th div.stat-sub-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.horse-table td.left-col-edge, div.left-col-edge {
+border-left:#75859C 8px solid;
+}
+
+.horse-table td.left-col-edge-small, div.left-col-edge-small {
+border-left:#75859C 4px solid;
+}
+
+.horse-table
+td:last-child,
+th:last-child {
+  border-right: #75859C 1px solid;
+}
+
+.horse-table tbody tr:hover td {
+    border-top: #DE733D 2px solid;
+    border-bottom: #DE733D 2px solid;
+}
+
+.horse-table .skill-val {
+ padding:3px 4px;
+ text-align: right;
+}
+
+.horse-table .stat-val {
+ padding:3px 5px;
+ text-align: right;
+}
+
+/* Horse table number cell coloring --------------------------------------------------------*/
+
+/*PERSONALITY*/
+.horse-table .perso_-3{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 100%, var(--skill-gradient-col-2) 0%)!important;
+}
+.horse-table .perso_-2{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 70%, var(--skill-gradient-col-2) 30%)!important;
+}
+.horse-table .perso_-1{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 40%, var(--skill-gradient-col-2) 60%)!important;
+}
+.horse-table .perso_0{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 100%, var(--skill-gradient-col-3) 0%)!important;
+}
+.horse-table .perso_1{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 70%, var(--skill-gradient-col-3) 30%)!important;
+}
+.horse-table .perso_2{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 40%, var(--skill-gradient-col-3) 60%)!important;
+}
+.horse-table .perso_3{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 0%, var(--skill-gradient-col-3) 100%)!important;
+}
+
+
+/*CONFO*/
+.horse-table .confo_-3{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 100%, var(--skill-gradient-col-3) 0%)!important;
+}
+.horse-table .confo_-2{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 70%, var(--skill-gradient-col-3) 30%)!important;
+}
+.horse-table .confo_-1{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 40%, var(--skill-gradient-col-3) 60%)!important;
+}
+.horse-table .confo_0{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 100%, var(--skill-gradient-col-4) 0%)!important;
+}
+.horse-table .confo_1{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 70%, var(--skill-gradient-col-4) 30%)!important;
+}
+.horse-table .confo_2{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 40%, var(--skill-gradient-col-4) 60%)!important;
+}
+.horse-table .confo_3{
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 0%, var(--skill-gradient-col-4) 100%)!important;
+}
+
+/* SKILLS */
+.horse-table .skill-5, .horse-table .skill-10 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 100%, var(--skill-gradient-col-2) 0%)!important;
+}
+
+.horse-table .skill-15, span.skill-15 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 80%, var(--skill-gradient-col-2) 20%)!important;
+}
+
+.horse-table .skill-20 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 60%, var(--skill-gradient-col-2) 40%)!important;
+}
+
+.horse-table .skill-25 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 40%, var(--skill-gradient-col-2) 60%)!important;
+}
+.horse-table .skill-30 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 20%, var(--skill-gradient-col-2) 80%)!important;
+}
+
+.horse-table .skill-35 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-1) 0%, var(--skill-gradient-col-2) 100%)!important;
+}
+
+.horse-table .skill-40 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 80%, var(--skill-gradient-col-3) 20%)!important;
+}
+
+.horse-table .skill-45 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 60%, var(--skill-gradient-col-3) 40%)!important;
+}
+
+.horse-table .skill-45 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 40%, var(--skill-gradient-col-3) 60%)!important;
+}
+
+.horse-table .skill-50 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 20%, var(--skill-gradient-col-3) 80%)!important;
+}
+
+.horse-table .skill-55 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-2) 0%, var(--skill-gradient-col-3) 100%)!important;
+}
+
+.horse-table .skill-60 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 75%, var(--skill-gradient-col-4) 25%)!important;
+}
+
+.horse-table .skill-65 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 50%, var(--skill-gradient-col-4) 50%)!important;
+}
+
+
+.horse-table .skill-70 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 20%, var(--skill-gradient-col-4) 80%)!important;
+}
+
+
+.horse-table .skill-75 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-3) 0%, var(--skill-gradient-col-4) 100%)!important;
+}
+
+.horse-table .skill-80 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-4) 75%, var(--skill-gradient-col-5) 25%)!important;
+}
+
+.horse-table .skill-85 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-4) 50%, var(--skill-gradient-col-5) 50%)!important;
+}
+
+
+.horse-table .skill-90 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-4) 20%, var(--skill-gradient-col-5) 80%)!important;
+}
+
+
+.horse-table .skill-95 {
+    background-color: color-mix(in srgb, var(--skill-gradient-col-4) 0%, var(--skill-gradient-col-5) 100%)!important;
 }
