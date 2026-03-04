@@ -56,11 +56,11 @@ export const AddHorseForm = () => {
     const validateForm = () => {
         const rules = {
             basic: [
-                ['General data','Conformation','Personality'],
+                ['general data','conformation','personality'],
                 "The passport page should include sections: General data, Conformation, and Personality"
             ],
             skills: [
-                ['Stamina','Ground manners'],
+                ['stamina','ground manners'],
                 "The training page should include sections: Stamina, Ground manners, and desired disciplines."
                 
             ]
@@ -68,7 +68,7 @@ export const AddHorseForm = () => {
         let isValid = true;
 
         for (const key in formState.values) {
-            const input = formState.values[key];
+            const input = formState.values[key].toLowerCase();
             const fitsRules = rules[key][0]
                 .map((word)=>input.includes(word))
                 .reduce((acc,current) => acc && current, true);

@@ -107,7 +107,8 @@ const getInfoValue = (dataStr,keyStr,endStr="\n") => {
  */
 const extractBasicInfo = (dataString) => {
     const extractHorseName = (nameStr) => {
-        return (nameStr.includes("Colt") || nameStr.includes("Filly")) ? "" : nameStr;
+        // If the horse has just been named, there is ( rename horse) that we don't wanto to include
+        return (nameStr.includes("Colt") || nameStr.includes("Filly")) ? "" : nameStr.split('(')[0]; 
     };
     const abbrBreed = (breedStr) => {
 
