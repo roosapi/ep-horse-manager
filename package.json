@@ -1,12 +1,13 @@
 {
-  "name": "electron-vite-react-template",
-  "productName": "electron-vite-react-template",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "name": "ep-horse-manager",
+  "productName": "EP Horse Manager",
+  "version": "0.1.0",
+  "description": "An app to manage and track EquinePassion horses.",
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {
     "start": "electron-forge start",
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
@@ -28,6 +29,7 @@
     "@electron-forge/plugin-fuses": "^7.11.1",
     "@electron-forge/plugin-vite": "^7.11.1",
     "@electron/fuses": "^1.8.0",
+    "@electron/rebuild": "^4.0.3",
     "@tanstack/router-plugin": "^1.157.15",
     "electron": "40.0.0",
     "vite": "^5.4.21"
