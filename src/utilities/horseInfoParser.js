@@ -227,38 +227,45 @@ const getStatAsInt = (statString, useMap = 'perso') => {
  * @returns {Array} - an array of discipline objects that contain the skills for one discpline each
  */
 const extractSkillsData = (horseId,skillsString) => {
-    const baseDiscps = new Set(Constants.disciplineMap.keys()).difference(new Set(Constants.combiDisciplinesMap.keys()))
-    const discpStrings = Array.from(baseDiscps).concat(['Legal Notice']); // Include 'Legal Notice' only as an end string for logging
+
+    const isAdult = skillsString.includes('participate in competition');
+    let baseDiscps =  Array.from(new Set(Constants.disciplineMap.keys()).difference(new Set(Constants.combiDisciplinesMap.keys())));
+    if (isAdult) {
+        baseDiscps = baseDiscps.filter((discp) => skillsString.includes(discp + ' - potential:')); // If the horse is adult, not all disciplines may be present
+    }
+    
+    
+    const discpStrings =baseDiscps.concat(['Legal Notice']); // Include 'Legal Notice' only as an end string for logging
     const maxIdx = discpStrings.length -1;
     let discpInfos = [];
+
     for (let i=0; i < maxIdx; i++) {
         
         const discp = discpStrings[i];
         let discpInfo = {'horse_id':horseId,'discipline':discp};
+
         // The discipline endurance has a sub-skill called endurance, so make sure to cut at "training for discipline"
-        const discpStr = sliceBetweenStr(skillsString,'training for '+discp,discpStrings[i+1]).slice('Basic training');
+        let discpStr = sliceBetweenStr(skillsString,'training for '+discp,discpStrings[i+1]).slice('Basic training');
+        // Structure of the training page for adult horses is a bit different
+        if (isAdult) {
+            discpStr = sliceBetweenStr(skillsString,discp + ' - potential:','each lesson').slice('Basic training');
+        }
+
         const skillRows = discpStr.trim().split('\n');
- 
-        // Depending on the width of the horse page when it is copied,
-        // the layout of the skills data is differrent.
-        // TODO write nicer
-        if (skillRows.length == 7) {
-            // We take last 5 rows: those are the skills in format:
-            // "current / total 	skillname" where we want the 'total'
-            for (let skillIdx = 2;skillIdx < 7;skillIdx++) {
-                const skillRow = skillRows[skillIdx].trim();
-                const skillVal = skillRow.split(' ')[2];
-                discpInfo['skill'+(skillIdx-1)] = skillVal;
-            }
-        } else {
-            // We take rows 4,6,8,10,12 which only inlcude the 'current / total ' numbers
-            let rowIdx = [4,6,8,10,12];
-            for (let skillIdx = 0;skillIdx < 5;skillIdx++) {
-                const skillRow = skillRows[rowIdx[skillIdx]].trim();
-                const skillVal = skillRow.split(' ')[2];
-                discpInfo['skill'+(skillIdx+1)] = skillVal;
+        const skillRowPattern = /\b(100|[0-9]|[1-9][0-9]) \/ (100|[0-9]|[1-9][0-9])\b/ // The rows with skills values include {int} / {int} where int <=0 100
+        let rowsDetected = 0;
+        for (const row of skillRows) {
+            const trimRow = row.trim();
+            // First row that matches is basic skills, which we don't care about
+            if (skillRowPattern.test(trimRow) && rowsDetected > 0 && rowsDetected < 6) {
+                const skillVal = row.split(' ')[2];
+                discpInfo['skill'+(rowsDetected)] = skillVal
+                rowsDetected += 1;
+            } else if (skillRowPattern.test(trimRow)) {
+                rowsDetected += 1;
             }
         }
+
         discpInfos.push(discpInfo);
     }
     return discpInfos;
