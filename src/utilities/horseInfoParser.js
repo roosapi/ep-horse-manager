@@ -59,6 +59,9 @@ const STATMAPS = {
     }
 }
 
+// Pre / suffixes to remove from horse name; TODO make this an editable configuration option
+const NAME_FIXES = ['Vanjan','do Vale', 'Falgaard', 'IBHA',' DOV'];
+
 // Receives an object from the form: {basic: TEXT, ...}
 // Returns an object with relevant information extracted.
 const parseHorseInfo = (horseData) => {
@@ -108,8 +111,11 @@ const getInfoValue = (dataStr,keyStr,endStr="\n") => {
 const extractBasicInfo = (dataString) => {
     const extractHorseName = (nameStr) => {
         // If the horse has just been named, there is ( rename horse) that we don't wanto to include
-        return (nameStr.includes("Colt") || nameStr.includes("Filly")) ? "" : nameStr.split('(')[0]; 
+        let name = (nameStr.includes("Colt") || nameStr.includes("Filly")) ? "" : nameStr.split('(')[0];
+        // Remove any pre/suffixes
+        return NAME_FIXES.reduce((name, nFix)=>name.replace(nFix,''), name); 
     };
+    
     const abbrBreed = (breedStr) => {
 
         // TODO this better eventually; maybe read map from file if makes sense?
